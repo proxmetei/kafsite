@@ -1,0 +1,99 @@
+CREATE TABLE Lecturer (
+	lecturer_id serial NOT NULL,
+	achivements text ,
+	publications_list text ,
+	teaching_info text ,
+	user_id serial NOT NULL,
+	photo bytea,
+	CONSTRAINT Lecturer_pk PRIMARY KEY (lecturer_id)
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+CREATE TABLE Lecturer_news (
+	lecturer_id integer NOT NULL,
+	news_id serial NOT NULL,
+	content text NOT NULL,
+	CONSTRAINT Lecturer_news_pk PRIMARY KEY (news_id)
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+CREATE TABLE Scientific_work (
+	id serial NOT NULL,
+	mentor_id serial NOT NULL,
+	author_id serial NOT NULL,
+	content text NOT NULL,
+	doc bytea NOT NULL,
+	CONSTRAINT Scientific_work_pk PRIMARY KEY (id)
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+CREATE TABLE Teaching_work (
+	id integer NOT NULL,
+	teaching_plan bytea NOT NULL,
+	teacher_id integer NOT NULL,
+	CONSTRAINT Teaching_work_pk PRIMARY KEY (id)
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+CREATE TABLE Global_news (
+	id serial NOT NULL,
+	content text NOT NULL,
+	picture bytea,
+	doc bytea,
+	CONSTRAINT Global_news_pk PRIMARY KEY (id)
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+CREATE TABLE Site_user (
+	id serial NOT NULL,
+	FIO text NOT NULL UNIQUE,
+	birth_date text NOT NULL,
+	password text NOT NULL,
+	email text NOT NULL,
+	status text NOT NULL DEFAULT 'undefined',
+	CONSTRAINT User_pk PRIMARY KEY (id)
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+CREATE TABLE Student (
+	course integer,
+	student_id serial,
+	user_id serial,
+	status text NOT NULL,
+	CONSTRAINT Student_pk PRIMARY KEY (student_id)
+) WITH (
+  OIDS=FALSE
+);
+
+
+
+ALTER TABLE Lecturer ADD CONSTRAINT Lecturer_fk0 FOREIGN KEY (user_id) REFERENCES Site_user(id);
+
+ALTER TABLE Lecturer_news ADD CONSTRAINT Lecturer_news_fk0 FOREIGN KEY (lecturer_id) REFERENCES Lecturer(lecturer_id);
+
+ALTER TABLE Scientific_work ADD CONSTRAINT Scientific_work_fk0 FOREIGN KEY (mentor_id) REFERENCES Lecturer(lecturer_id);
+ALTER TABLE Scientific_work ADD CONSTRAINT Scientific_work_fk1 FOREIGN KEY (author_id) REFERENCES Site_user(id);
+
+ALTER TABLE Teaching_work ADD CONSTRAINT Teaching_work_fk0 FOREIGN KEY (teacher_id) REFERENCES Lecturer(lecturer_id);
+
+
+
+ALTER TABLE Student ADD CONSTRAINT Student_fk0 FOREIGN KEY (user_id) REFERENCES Site_user(id);
