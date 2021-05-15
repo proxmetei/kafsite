@@ -9,7 +9,8 @@ connection.on("ReceiveMessage", function (user, message) {
     var msg = message.text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     var user = user.replace('/', '')
     var encodedMsg = user + ": " + msg
-    var li = document.createElement("li");
+    var li = document.createElement("div");
+    li.classList.add("message")
     li.textContent = encodedMsg;
     if (message.doc != null) {
         var br = document.createElement("br");
@@ -19,11 +20,9 @@ connection.on("ReceiveMessage", function (user, message) {
         li.appendChild(br);
         li.appendChild(a);
     }
-    if (message.color != 0)
-    {
-        li.classList.add('admin_mes');
-    }
-    document.getElementById("chat").appendChild(li);
+    let chat = document.getElementById("chat")
+    chat.appendChild(li);
+    chat.scrollTop = chat.scrollHeight;
 });
 
 connection.start().then(function () {

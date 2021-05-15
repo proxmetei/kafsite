@@ -11,6 +11,6 @@ namespace OnlineChat.Models.Chats
 
 		public string Name { get; set; }
 
-		public string GUID { get; set; }
-	}
+        public string GUID { get; set; }
+    }
 }

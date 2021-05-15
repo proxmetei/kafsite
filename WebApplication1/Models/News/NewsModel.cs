@@ -6,7 +6,10 @@ namespace OnlineChat.Models.News
         [Key]
         public int Id { get; set; }
 
+        [Required(ErrorMessage = "Не указан Текст")]
         public string Content { get; set; }
+        [Required(ErrorMessage = "Не указано Название")]
+        public string Title { get; set; }
 
         public byte[] PictureBytes { get; set; }
 

@@ -8,7 +8,8 @@ using System.Data;
 using OnlineChat.Models.Documents;
 namespace OnlineChat.Models.Messages
 {
-    public class MessageDAO : MessageIntesface
+    public class MessageDAO
+        //: MessageIntesface
     {
         private readonly IDbConnectionFactory connectionFactory;
         private readonly IDbConnection connection;
@@ -17,19 +18,24 @@ namespace OnlineChat.Models.Messages
             connectionFactory = _connectionFactory;
             connection = connectionFactory.GetDbConnection();
         }
-        public void Create(Message message)
+        public void CreateInChat(Message message)
         {
  
-                var sqlQuery = "INSERT INTO Messages (Color, Text, ChatId, UserId) VALUES(@Color, @Text, @ChatId,@UserId)";
+                var sqlQuery = "INSERT INTO Messages (text, chat_id, user_id) VALUES(@Text, @ChatId,@UserId)";
             connection.Execute(sqlQuery, message);
         }
+        public void CreateInForum(Message message)
+        {
 
+            var sqlQuery = "INSERT INTO Messages (text, forum_id, user_id) VALUES(@Text, @ForumId,@UserId)";
+            connection.Execute(sqlQuery, message);
+        }
         public void CreateWithDoc(Message message,Document doc)
         {
-            var sqlQuery1 = "INSERT INTO Documents (GUID, Name, Data) VALUES(@GUID, @Name, @Data)";
+            var sqlQuery1 = "INSERT INTO Documents (guid, name, Data) VALUES(@GUID, @Name, @Data)";
             connection.Execute(sqlQuery1, doc);
             message.DocId = GetDocument(doc.GUID).Id;
-            var sqlQuery2 = "INSERT INTO Messages (Color, Text, ChatId, UserId,DocId) VALUES(@Color, @Text, @ChatId,@UserId,@DocId)";
+            var sqlQuery2 = "INSERT INTO Messages (text, chat_id, user_id, doc_id) VALUES(@Text, @ChatId,@UserId,@DocId)";
             connection.Execute(sqlQuery2, message);
         }
 
@@ -43,7 +49,7 @@ namespace OnlineChat.Models.Messages
         }
         public Document GetDoc(int id)
         {
-            return connection.Query<Document>("SELECT * FROM Documents WHERE Id = @id", new { id }).FirstOrDefault();
+            return connection.Query<Document>("SELECT * FROM Documents WHERE id = @id", new { id }).FirstOrDefault();
         }
     }
 }

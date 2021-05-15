@@ -32,5 +32,9 @@
     <Folder Include="Controllers\LecturerWall\" />
     <Folder Include="Views\TeacherCardEdit\" />
     <Folder Include="Views\LecturerWall\" />
+    <Folder Include="Controllers\ChatPanel\" />
+    <Folder Include="Views\ChatPanel\" />
+    <Folder Include="Controllers\NewsPanel\" />
+    <Folder Include="Views\NewsPanel\" />
   </ItemGroup>
 </Project>

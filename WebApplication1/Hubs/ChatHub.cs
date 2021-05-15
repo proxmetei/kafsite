@@ -25,7 +25,7 @@ namespace OnlineChat.Hubs
         public async Task SendMessage( string login,Message message,string roomName,string file)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
-            repos.Create(message);
+            repos.CreateInChat(message);
             await Clients.Group(roomName).SendAsync("ReceiveMessage", login, message,file);
         }
     }

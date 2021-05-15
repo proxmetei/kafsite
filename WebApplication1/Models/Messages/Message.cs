@@ -11,9 +11,9 @@ namespace OnlineChat.Models.Messages
     {
 		public int Id { get; set; }
 	    public Document Doc { get; set; }
-		public int Color { get; set; }
 		public string Text { get; set; }
 		public int ChatId { get; set; }
+		public int ForumId { get; set; }
 		public int UserId { get; set; }
 		public int DocId { get; set; }
 	}

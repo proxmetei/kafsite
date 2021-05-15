@@ -54,8 +54,13 @@ namespace OnlineChat.Models.Users
 
         public List<Chat> GetChats(int id)
         {
-            return connection.Query<Chat>("SELECT C.Name,C.Id FROM Chats As C Inner Join Dependencies As S on S.ChatId=C.Id WHERE S.Id = @id", new { id }).ToList();
+            return connection.Query<Chat>("SELECT C.id AS ID, C.guid AS GUID FROM chats As C Inner Join relation_chats As S on S.chat_id=C.id WHERE S.user_id = @id", new { id }).ToList();
 
+        }
+        public String GetOtherUser(int chat_id,int user_id)
+        {
+            int id = connection.Query<int>("SELECT user_id FROM relation_chats WHERE chat_id = @ChatId and user_id!=@UserId", new { ChatId=chat_id,UserId=user_id }).FirstOrDefault();
+            return connection.Query<string>("SELECT fio FROM site_user  WHERE id=@UserId", new {  UserId = id }).FirstOrDefault();
         }
         public User Get(int id)
         {

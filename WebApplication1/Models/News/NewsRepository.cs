@@ -22,16 +22,16 @@ namespace OnlineChat.Models.News
             crypt = _crypt;
             connection = connectionFactory.GetDbConnection();
         }
-        public IEnumerable<NewsModel> GetAllNews()
+        public List<NewsModel> GetAllNews()
         {
 
                 string sql = "SELECT id AS Id, content AS Content, " +
-                     "picture AS PictureBytes, doc AS DocBytes, " +
+                     "picture AS PictureBytes, doc AS DocBytes, title AS Title, " +
                      "picture_name AS PictureName, doc_name AS DocName " +
                      "FROM public.global_news";
 
 
-                return connection.Query<NewsModel>(sql);
+                return connection.Query<NewsModel>(sql).ToList();
             
         }
 
@@ -39,33 +39,33 @@ namespace OnlineChat.Models.News
         {
 
 
-                string sql1 = "INSERT INTO public.global_news(content, picture, doc, picture_name, doc_name) " +
-                    "VALUES(@CN, @PIC, @DOC, @PICN, @DOCN)";
-                string sql2 = "INSERT INTO public.global_news(content, doc, doc_name) " +
-                    "VALUES(@CN, @DOC, @DOCN)";
-                string sql3 = "INSERT INTO public.global_news(content, picture, picture_name) " +
-                    "VALUES(@CN, @PIC,@PICN)";
-                string sql4 = "INSERT INTO public.global_news(content) " +
-                    " VALUES(@CON) ";
+                string sql1 = "INSERT INTO public.global_news(content, picture, doc, picture_name, doc_name, title) " +
+                    "VALUES(@CON, @PIC, @DOC, @PICN, @DOCN, @TITN)";
+                string sql2 = "INSERT INTO public.global_news(content, doc, doc_name, title) " +
+                    "VALUES(@CON, @DOC, @DOCN, @TITN)";
+                string sql3 = "INSERT INTO public.global_news(content, picture, picture_name, title) " +
+                    "VALUES(@CON, @PIC,@PICN, @TITN)";
+                string sql4 = "INSERT INTO public.global_news(content, title) " +
+                    " VALUES(@CON, @TITN) ";
 
 
 
                 if (news.DocName == null && news.PictureName == null)
                 {
     
-                    connection.Execute(sql4, new { CON = news.Content });
+                    connection.Execute(sql4, new { CON = news.Content , TITN=news.Title });
                     return true;
                 }
                 else if (news.DocName == null && news.PictureName != null)
                 {
      
-                    connection.Execute(sql3, new { CON = news.Content, PIC = news.PictureBytes, PICN = news.PictureName });
+                    connection.Execute(sql3, new { CON = news.Content, PIC = news.PictureBytes, PICN = news.PictureName , TITN = news.Title });
                     return true;
                 }
                 else if (news.DocName != null && news.PictureName == null)
                 {
 
-                    connection.Execute(sql2, new { CON = news.Content, DOC = news.DocBytes, DOCN = news.DocName });
+                    connection.Execute(sql2, new { CON = news.Content, DOC = news.DocBytes, DOCN = news.DocName, TITN = news.Title });
                     return true;
                 }
                 else if (news.DocName != null && news.PictureName != null)
@@ -78,7 +78,8 @@ namespace OnlineChat.Models.News
                             DOC = news.DocBytes,
                             DOCN = news.DocName,
                             PIC = news.PictureBytes,
-                            PICN = news.PictureName
+                            PICN = news.PictureName,
+                            TITN = news.Title
                         });
                     return true;
                 }
@@ -91,7 +92,7 @@ namespace OnlineChat.Models.News
         {
 
                 string sql = "SELECT id AS Id, content AS Content, " +
-                    "picture AS PictureBytes, doc AS DocBytes, " +
+                    "picture AS PictureBytes, doc AS DocBytes, title AS Title, " +
                     "picture_name AS PictureName, doc_name AS DocName " +
                     "FROM public.global_news " +
                     "WHERE id BETWEEN @FIRST AND @LAST";
@@ -101,12 +102,12 @@ namespace OnlineChat.Models.News
             
         }
 
-        public IEnumerable<NewsModel> GetLastTenNews()
+        public IEnumerable<NewsModel> GetLastTenNews(int index)
         {
 
                 string sql1 = "SELECT MAX(id) FROM public.global_news";
 
-                int lastId = connection.Query<int>(sql1).FirstOrDefault();
+                int lastId = connection.Query<int>(sql1).FirstOrDefault()-index;
 
                 int firstId = lastId <= 10 ? firstId = 1 : lastId - 10;
 
@@ -115,6 +116,19 @@ namespace OnlineChat.Models.News
                 return GetAllNewsBetween(firstId, lastId);
             
         }
+        //public NewsModel GetNews(int id)
+        //{
+
+        //    string sql = "SELECT id AS Id, content AS Content, " +
+        //              "picture AS PictureBytes, doc AS DocBytes, title AS Title " +
+        //              "picture_name AS PictureName, doc_name AS DocName " +
+        //              "FROM public.global_news WHERE id=@ID";
+
+        //   return connection.Query<NewsModel>(sql, new { ID = id}).FirstOrDefault();
+
+            
+
+        //}
 
         public bool DeleteNews(int id)
         {

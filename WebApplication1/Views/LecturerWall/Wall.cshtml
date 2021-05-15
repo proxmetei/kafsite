@@ -18,6 +18,8 @@
         </div>
         <div>
             <h1 class="teacher-info__fio">@ViewBag.User.FIO</h1>
+            @if(ViewBag.Write)
+            { 
             <form asp-controller="Chat" asp-action="OpenChat">
 
                 <div class="form-group notdisp">
@@ -29,6 +31,7 @@
                     <input type="submit" value="Написать перподавателю" class="btn btn-primary pink" />
                 </div>
             </form>
+            }
         </div>
     </header>
     <div class="teacher-info__add">

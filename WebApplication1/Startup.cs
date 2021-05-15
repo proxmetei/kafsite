@@ -11,6 +11,7 @@ using OnlineChat.Models.Chats;
 using OnlineChat.Models.Messages;
 using OnlineChat.Models.Users;
 using OnlineChat.Models.Lecturer;
+using OnlineChat.Models.News;
 
 namespace OnlineChat
 {
@@ -42,6 +43,7 @@ namespace OnlineChat
 			builder.RegisterType<MessageDAO>();
 			builder.RegisterType<LecturerRepository>();
 			builder.RegisterType<WallMessageRepository>();
+			builder.RegisterType<NewsRepository>();
 			builder.RegisterType<AESCrypt>();
 			builder.RegisterType<LogFactory>();
 			var connectionString = Configuration.GetConnectionString("DefaultConnection");

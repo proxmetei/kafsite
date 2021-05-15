@@ -1,0 +1,82 @@
+﻿@using OnlineChat.Models.News
+@model OnlineChat.ViewModels.CreateModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{ }
+
+
+<h1>Новости</h1>
+<form id="modalnews" class="mdalnew notdisp" method="post" enctype="multipart/form-data" asp-controller="NewsPanel" asp-action="Create">
+
+    <div class="form-group ">
+        <label asp-for="News.Title" class="control-label">Название</label>
+        <input type="text" asp-for="News.Title" class="form-control" />
+        <span asp-validation-for="News.Title" class="text-danger"></span>
+    </div>
+    <div class="form-group ">
+        <label asp-for="News.Content" class="control-label">Текст</label>
+        <input type="text" asp-for="News.Content" class="form-control" />
+        <span asp-validation-for="News.Content" class="text-danger"></span>
+    </div>
+
+        <label asp-for="File" class="control-label">Изображение</label>
+        <input type="file" asp-for="File" class="form-control" />
+        <span asp-validation-for="File" class="text-danger"></span>
+
+  
+        <label asp-for="File1" class="control-label">Документ</label>
+        <input type="file" asp-for="File1" class="form-control" />
+        <span asp-validation-for="File1" class="text-danger"></span>
+
+    <div class="form-group">
+        <input type="submit" value="Создать Новость" class="btn btn-primary pink" />
+    </div>
+</form>
+<input id="nonews" type="submit" value="Отменить" class="btn btn-primary notdisp" />
+<input id="addnews" type="submit" value="Создать Новость" class="btn btn-primary" />
+
+
+@foreach (NewsModel item in ViewBag.News)
+{
+
+<div class="globalnews">
+    <form asp-controller="NewsPanel" asp-action="ShowNews">
+        <div class="form-group notdisp">
+            <label asp-for="Name" class="control-label">Название</label>
+            <input type="text" asp-for="Name" class="form-control" value=@item.Id />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="@item.Title" class="lecturerBut" />
+        </div>
+    </form>
+    <div class="globalnews__content">
+        <div class="globalnews__content__img-cont">
+            @if (item.PictureBytes != null)
+            {
+<img class="globalnews__content__img-cont__img" src="@String.Format("data:" + item.PictureName + ";base64,{0}", item.PictureBytes)" />}
+        </div>
+        <div class="globalnews__content__text">
+            @item.Content
+        </div>
+
+    </div>
+</div>}
+
+<script type="text/javascript">
+    document.getElementById("addnews").addEventListener('click', () => {
+        document.getElementById("addnews").classList.add('notdisp');
+        document.getElementById('modalnews').classList.remove('notdisp');
+        document.getElementById("nonews").classList.remove('notdisp');
+
+    });
+    document.getElementById("nonews").addEventListener('click', () => {
+
+        document.getElementById("addnews").classList.remove('notdisp');
+        document.getElementById('modalnews').classList.add('notdisp');
+        document.getElementById("nonews").classList.add('notdisp');
+
+
+    });
+</script>

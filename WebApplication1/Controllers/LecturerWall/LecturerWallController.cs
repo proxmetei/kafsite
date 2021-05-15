@@ -52,7 +52,8 @@ namespace OnlineChat.Controllers.LecturerWall
             {
                 ViewBag.Admin = false;
             }
-            LecturerModel lec = repos.GetLecturerByUserId(Convert.ToInt32(model.Name));            ViewBag.User = repos2.Get(lec.UserId);
+            LecturerModel lec = repos.GetLecturerByUserId(Convert.ToInt32(model.Name));
+            ViewBag.User = repos2.Get(lec.UserId);
             ViewBag.Lecturer = lec;
             ViewBag.News = repos1.GetAllPosts(lec.Id);
             ViewBag.Photo = Convert.ToBase64String(lec.Photo);

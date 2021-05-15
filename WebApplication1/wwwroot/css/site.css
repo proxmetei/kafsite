@@ -97,16 +97,13 @@ font-size:10px;
 .chat {
     border: 1px solid #ced4da;
     border-radius: .25rem;
-    height:400px;
-    overflow-y:auto;
+    height:50vh;
+    overflow-y:scroll;
 }
 .send {
     position: absolute;
     right: 0px;
     margin-right: 85px;
-}
-.admin_mes {
-    background-color:forestgreen;
 }
 .join_modal {
     border:1px solid #9300eb;
@@ -212,4 +209,11 @@ position:absolute;
 }
 .logoutbut {
 margin-left:3%;
+}
+.message {
+    display:flex;
+    justify-content:center;
+    flex-direction:column;
+    height:5.535vh;
+    border: solid black 1px;
 }
