@@ -445,3 +445,5 @@ C:/Users/mrsha/source/repos/online_chat/WebApplication1/obj/Debug/netcoreapp3.1/
 /Users/aleksej/Downloads/online_chat/WebApplication1/obj/Debug/netcoreapp3.1/Razor/Views/LecturerWall/EditWall.cshtml.g.cs
 /Users/aleksej/Downloads/online_chat/WebApplication1/obj/Debug/netcoreapp3.1/Razor/Views/ChatPanel/ChatPanel.cshtml.g.cs
 /Users/aleksej/Downloads/online_chat/WebApplication1/obj/Debug/netcoreapp3.1/Razor/Views/NewsPanel/NewsPanel.cshtml.g.cs
+/Users/aleksej/Downloads/online_chat/WebApplication1/obj/Debug/netcoreapp3.1/Razor/Views/NewsWall/EditWall.cshtml.g.cs
+/Users/aleksej/Downloads/online_chat/WebApplication1/obj/Debug/netcoreapp3.1/Razor/Views/NewsWall/NewsWall.cshtml.g.cs

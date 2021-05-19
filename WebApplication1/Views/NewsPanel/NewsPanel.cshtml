@@ -20,14 +20,14 @@
         <span asp-validation-for="News.Content" class="text-danger"></span>
     </div>
 
-        <label asp-for="File" class="control-label">Изображение</label>
-        <input type="file" asp-for="File" class="form-control" />
-        <span asp-validation-for="File" class="text-danger"></span>
+    <label asp-for="File" class="control-label">Изображение</label>
+    <input type="file" asp-for="File" class="form-control" />
+    <span asp-validation-for="File" class="text-danger"></span>
 
-  
-        <label asp-for="File1" class="control-label">Документ</label>
-        <input type="file" asp-for="File1" class="form-control" />
-        <span asp-validation-for="File1" class="text-danger"></span>
+
+    <label asp-for="File1" class="control-label">Документ</label>
+    <input type="file" asp-for="File1" class="form-control" />
+    <span asp-validation-for="File1" class="text-danger"></span>
 
     <div class="form-group">
         <input type="submit" value="Создать Новость" class="btn btn-primary pink" />
@@ -47,25 +47,49 @@
             <input type="text" asp-for="Name" class="form-control" value=@item.Id />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <input type="submit" value="@item.Title" class="lecturerBut" />
+        <div class="form-group globalnews-title">
+            <input type="submit" value="@item.Title" />
         </div>
     </form>
     <div class="globalnews__content">
         <div class="globalnews__content__img-cont">
             @if (item.PictureBytes != null)
             {
-<img class="globalnews__content__img-cont__img" src="@String.Format("data:" + item.PictureName + ";base64,{0}", item.PictureBytes)" />}
+<img class="globalnews__content__img-cont__img" src="@String.Format("data:" + item.PictureName + ";base64,{0}", Convert.ToBase64String(item.PictureBytes))" />}
         </div>
         <div class="globalnews__content__text">
+
             @item.Content
+
         </div>
 
     </div>
 </div>}
-
-<script type="text/javascript">
-    document.getElementById("addnews").addEventListener('click', () => {
+@if (!ViewBag.Start)
+{
+<form asp-controller="NewsPanel" asp-action="NewsPanel">
+    <div class="form-group notdisp">
+        <label asp-for="Name" class="control-label">Название</label>
+        <input type="text" asp-for="Name" class="form-control" value=@ViewBag.PrevIndex />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group globalnews-title">
+        <input type="submit" value="Предыдущая страница" />
+    </div>
+</form>}
+@if (!ViewBag.Finish)
+{
+<form asp-controller="NewsPanel" asp-action="NewsPanel">
+    <div class="form-group notdisp">
+        <label asp-for="Name" class="control-label">Название</label>
+        <input type="text" asp-for="Name" class="form-control" value=@ViewBag.NewIndex />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group globalnews-title">
+        <input type="submit" value="Следующая страница" />
+    </div>
+</form>}
+<script type="text/javascript">document.getElementById("addnews").addEventListener('click', () => {
         document.getElementById("addnews").classList.add('notdisp');
         document.getElementById('modalnews').classList.remove('notdisp');
         document.getElementById("nonews").classList.remove('notdisp');
@@ -78,5 +102,4 @@
         document.getElementById("nonews").classList.add('notdisp');
 
 
-    });
-</script>
+    });</script>

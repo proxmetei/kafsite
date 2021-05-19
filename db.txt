@@ -5,6 +5,7 @@ CREATE TABLE Lecturer (
 	teaching_info text ,
 	user_id serial NOT NULL,
 	photo bytea,
+	photo_name text,
 	CONSTRAINT Lecturer_pk PRIMARY KEY (lecturer_id)
 ) WITH (
   OIDS=FALSE
@@ -52,6 +53,9 @@ CREATE TABLE Global_news (
 	content text NOT NULL,
 	picture bytea,
 	doc bytea,
+	title text,
+        picture_name text NOT NULL,
+	doc_name text NOT NULL,
 	CONSTRAINT Global_news_pk PRIMARY KEY (id)
 ) WITH (
   OIDS=FALSE
@@ -97,3 +101,66 @@ ALTER TABLE Teaching_work ADD CONSTRAINT Teaching_work_fk0 FOREIGN KEY (teacher_
 
 
 ALTER TABLE Student ADD CONSTRAINT Student_fk0 FOREIGN KEY (user_id) REFERENCES Site_user(id);
+
+
+CREATE TABLE Chats (
+	id serial NOT NULL,
+	name text,
+	guid text NOT NULL
+	CONSTRAINT Chats_pk PRIMARY KEY (id)
+) WITH (
+  OIDS=FALSE
+);
+CREATE TABLE Forums (
+	id serial NOT NULL,
+	name text,
+	CONSTRAINT Forums_pk PRIMARY KEY (id)
+) WITH (
+  OIDS=FALSE
+);
+CREATE TABLE Messages (
+	id serial NOT NULL,
+	content text,
+	document bytea ,
+         user_id int NOT NULL,
+	chat_id int,
+	forum_id int,
+	CONSTRAINT Messages_pk PRIMARY KEY (id)
+) WITH (
+  OIDS=FALSE
+);
+CREATE TABLE Relation_chats (
+	id serial NOT NULL,
+	user_id int NOT NULL,
+	chat_id int NOT NULL,
+	CONSTRAINT Relation_chats_pk PRIMARY KEY (id)
+) WITH (
+  OIDS=FALSE
+);
+CREATE TABLE Relation_forums (
+	id serial NOT NULL,
+	user_id int NOT NULL,
+	forum_id int NOT NULL,
+	CONSTRAINT Relation_forums_pk PRIMARY KEY (id)
+) WITH (
+  OIDS=FALSE
+);
+CREATE TABLE Documents (
+	id serial NOT NULL,
+	guid text NOT NULL,
+	data bytea NOT NULL,
+	CONSTRAINT Docs_pk PRIMARY KEY (id)
+) WITH (
+  OIDS=FALSE
+);
+
+
+ALTER TABLE Messages ADD CONSTRAINT doc_fk0 FOREIGN KEY (doc_id) REFERENCES Documents(id);
+
+ALTER TABLE Messages ADD CONSTRAINT Chat_fk0 FOREIGN KEY (chat_id) REFERENCES Chats(id);
+ALTER TABLE Messages ADD CONSTRAINT Forum_fk0 FOREIGN KEY (forum_id) REFERENCES Forums(id);
+ALTER TABLE Relation_chats ADD CONSTRAINT Chat_fk1 FOREIGN KEY (chat_id) REFERENCES Chats(id);
+ALTER TABLE Relation_forums ADD CONSTRAINT Forum_fk1 FOREIGN KEY (forum_id) REFERENCES Forums(id);
+ALTER TABLE Relation_forums ADD CONSTRAINT user_fk0 FOREIGN KEY (user_id) REFERENCES Site_user(id);
+ALTER TABLE Relation_chats ADD CONSTRAINT user_fk1 FOREIGN KEY (user_id) REFERENCES Site_user(id);
+ALTER TABLE Messages ADD CONSTRAINT User_fk3 FOREIGN KEY (user_id) REFERENCES Site_user(id);

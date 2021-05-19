@@ -56,6 +56,8 @@ namespace OnlineChat.Controllers.LecturerWall
             ViewBag.User = repos2.Get(lec.UserId);
             ViewBag.Lecturer = lec;
             ViewBag.News = repos1.GetAllPosts(lec.Id);
+            ViewBag.Photo = null;
+            if(lec.Photo!=null)
             ViewBag.Photo = Convert.ToBase64String(lec.Photo);
             ViewBag.PhotoString = lec.PhotoName;
             if (User.Identity.IsAuthenticated)
@@ -91,10 +93,20 @@ namespace OnlineChat.Controllers.LecturerWall
             LecturerModel lec = repos.GetLecturerByUserId(id);
             ViewBag.User = repos2.Get(lec.UserId);
             //Photo = lec.Photo;
-            ViewBag.Photo = Convert.ToBase64String(lec.Photo);
+            ViewBag.Photo = null;
+            if (lec.Photo != null)
+                ViewBag.Photo = Convert.ToBase64String(lec.Photo);
             ViewBag.PhotoString = lec.PhotoName;
             ViewBag.Lecturer = lec;
             ViewBag.News = repos1.GetAllPosts(lec.Id);
+            if (User.Identity.IsAuthenticated && this.User.FindFirstValue(ClaimTypes.Role) != "User")
+            {
+                ViewBag.Write = true;
+            }
+            else
+            {
+                ViewBag.Write = false;
+            }
             return View("Wall");
         }
         [Authorize(Roles = "Admin")]
@@ -103,7 +115,9 @@ namespace OnlineChat.Controllers.LecturerWall
             ViewBag.Edit = true;
             LecturerModel lec = repos.GetLecturerByUserId(Convert.ToInt32(model.Name));
             ViewBag.User = repos2.Get(lec.UserId);
-            ViewBag.Photo = Convert.ToBase64String(lec.Photo);
+            ViewBag.Photo = null;
+            if (lec.Photo != null)
+                ViewBag.Photo = Convert.ToBase64String(lec.Photo);
             ViewBag.PhotoString = lec.PhotoName;
             //Photo = lec.Photo;
             ViewBag.Lecturer = lec;
@@ -119,10 +133,11 @@ namespace OnlineChat.Controllers.LecturerWall
             lec.Achivements = model.Achivements;
             lec.TeachingInfo = model.TeachingInfo;
             lec.UserId = model.UserId;
-            lec.PhotoName = model.Photo.ContentType;
+            
             if (model.Photo != null)
                 using (var binaryReader = new BinaryReader(model.Photo.OpenReadStream()))
                 {
+                    lec.PhotoName = model.Photo.ContentType;
                     lec.Photo = binaryReader.ReadBytes((int)model.Photo.Length);
                 }
             repos.UpdateLecturer(lec);
@@ -130,11 +145,7 @@ namespace OnlineChat.Controllers.LecturerWall
             model1.Name = lec.UserId.ToString();
             return RedirectToAction("MyWall", "LecturerWall", new {id = lec.UserId});
         }
-        public ActionResult GetPhoto(byte[] Photo)
-        {
-
-            return File(Photo, "image/jpg");
-        }
+       
         public IActionResult AddPost(CreateModel model)
         {
             WallMessageModel message = new WallMessageModel();

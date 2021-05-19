@@ -217,3 +217,30 @@ margin-left:3%;
     height:5.535vh;
     border: solid black 1px;
 }
+.globalnews {
+display:flex;
+flex-direction:column;
+border:solid black 1px;
+height: 20.0vh;
+border-radius:1.0vh;
+}
+.globalnews__content__img-cont__img {
+    height: 16vh;
+    width: 16vh;
+    border-radius:1vh;
+}
+.globalnews__content {
+    margin-left:3vh;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+}
+.globalnews__content__text {
+    word-wrap:normal;
+    height:12vh;
+margin-left:20%;
+}
+.globalnews-title {
+display:flex;
+justify-content:center;
+}

@@ -87,7 +87,59 @@ namespace OnlineChat.Models.News
 
             
         }
+        public bool UpdateNews(NewsModel news)
+        {
 
+
+            string sql1 = "UPDATE public.global_news SET (content, picture, doc, picture_name, doc_name, title) = " +
+                "(@CON, @PIC, @DOC, @PICN, @DOCN, @TITN) WHERE id=@ID";
+            string sql2 = "UPDATE public.global_news SET (content, doc, doc_name, title) = " +
+                "(@CON, @DOC, @DOCN, @TITN) WHERE id=@ID";
+            string sql3 = "UPDATE public.global_news SET (content, picture, picture_name, title) = " +
+                "(@CON, @PIC,@PICN, @TITN) WHERE id=@ID";
+            string sql4 = "UPDATE public.global_news SET (content, title) = " +
+                " (@CON, @TITN) WHERE id=@ID";
+
+
+
+            if (news.DocName == null && news.PictureName == null)
+            {
+
+                connection.Execute(sql4, new { CON = news.Content, TITN = news.Title, ID=news.Id });
+                return true;
+            }
+            else if (news.DocName == null && news.PictureName != null)
+            {
+
+                connection.Execute(sql3, new { CON = news.Content, PIC = news.PictureBytes, PICN = news.PictureName, TITN = news.Title, ID = news.Id });
+                return true;
+            }
+            else if (news.DocName != null && news.PictureName == null)
+            {
+
+                connection.Execute(sql2, new { CON = news.Content, DOC = news.DocBytes, DOCN = news.DocName, TITN = news.Title , ID = news.Id });
+                return true;
+            }
+            else if (news.DocName != null && news.PictureName != null)
+            {
+
+                connection.Execute(sql1,
+                    new
+                    {
+                        CON = news.Content,
+                        DOC = news.DocBytes,
+                        DOCN = news.DocName,
+                        PIC = news.PictureBytes,
+                        PICN = news.PictureName,
+                        TITN = news.Title,
+                        ID = news.Id
+                    });
+                return true;
+            }
+            else return false;
+
+
+        }
         public IEnumerable<NewsModel> GetAllNewsBetween(int fromId, int toId)
         {
 
@@ -116,6 +168,7 @@ namespace OnlineChat.Models.News
                 return GetAllNewsBetween(firstId, lastId);
             
         }
+
         //public NewsModel GetNews(int id)
         //{
 
@@ -126,28 +179,43 @@ namespace OnlineChat.Models.News
 
         //   return connection.Query<NewsModel>(sql, new { ID = id}).FirstOrDefault();
 
-            
+
 
         //}
-
         public bool DeleteNews(int id)
         {
 
-                string sql1 = "SELECT id FROM public.global_news WHERE id = @ID";
-                string sql2 = "DELETE FROM public.global_news WHERE id = @ID";
+            string sql1 = "SELECT id FROM public.global_news WHERE id = @ID";
+            string sql2 = "DELETE FROM public.global_news WHERE id = @ID";
 
 
 
-                string check = connection.Query<string>(sql1, new { ID = id }).FirstOrDefault();
+            string check = connection.Query<string>(sql1, new { ID = id }).FirstOrDefault();
 
-                if (connection.Query<string>(sql1, new { ID = id }).FirstOrDefault() == null)
-                {
-                    return false;
-                }
+            if (connection.Query<string>(sql1, new { ID = id }).FirstOrDefault() == null)
+            {
+                return false;
+            }
 
-                connection.Execute(sql2, new { ID = id });
+            connection.Execute(sql2, new { ID = id });
 
-                return true;
+            return true;
+
+        }
+
+        public NewsModel GetNews(int id)
+        {
+
+            string sql = "SELECT id AS Id, content AS Content, " +
+                "picture AS PictureBytes, doc AS DocBytes, title AS Title, " +
+                "picture_name AS PictureName, doc_name AS DocName " +
+                "FROM public.global_news WHERE id=@ID";
+
+
+
+            return connection.Query<NewsModel>(sql, new { ID = id }).FirstOrDefault();
+
+             
             
         }
     }

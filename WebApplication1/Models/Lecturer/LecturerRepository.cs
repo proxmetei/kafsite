@@ -162,10 +162,14 @@ namespace OnlineChat.Models.Lecturer
             }
         public void UpdateLecturer(LecturerModel lec)
         {
+            
             UpdateLecturerAchivements(lec.Achivements,lec.Id);
-            UpdateLecturerPublications(lec.Publications, lec.Id);
-            UpdateLecturerTeachingInfo(lec.TeachingInfo, lec.Id);
-            UpdateLecturerPhoto(lec.Photo,lec.PhotoName,lec.Id);
+          
+                UpdateLecturerPublications(lec.Publications, lec.Id);
+            
+                UpdateLecturerTeachingInfo(lec.TeachingInfo, lec.Id);
+            if (lec.Photo != null)
+                UpdateLecturerPhoto(lec.Photo,lec.PhotoName,lec.Id);
         }
         }
     }

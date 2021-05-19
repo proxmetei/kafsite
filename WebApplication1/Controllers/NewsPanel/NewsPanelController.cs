@@ -36,8 +36,7 @@ namespace OnlineChat.Controllers.NewsPanel
         List<User> users;
         [TempData]
         public string Users { get; set; }
-        [TempData]
-        public Boolean Edit { get; set; }
+       
         public NewsPanelController(LecturerRepository _repos, UserDAO _repos1, NewsRepository _repos2)
         {
             repos = _repos;
@@ -59,6 +58,7 @@ namespace OnlineChat.Controllers.NewsPanel
                 index = Convert.ToInt32(model.Name);
             }
             List<NewsModel> news = repos2.GetAllNews();
+
             bool finish = false, start = false ;
             for (int i = 0; i < 10; i++)
             {
@@ -66,12 +66,14 @@ namespace OnlineChat.Controllers.NewsPanel
                 if (j >= 0)
                 {
                     mynews.Add(news.ElementAt(j));
+                    ViewBag.NewIndex=i+index+1;
                 }
                 else
                 {
                     finish = true;
                 }
             }
+            ViewBag.PrevIndex = index - 10;
             if (index == 0)
                 start = true;
             ViewBag.News = mynews;
@@ -79,15 +81,23 @@ namespace OnlineChat.Controllers.NewsPanel
             ViewBag.Start = start;
             return View();
         }
-        public async Task<IActionResult> ShowCard(CreateModel model)
+        public async Task<IActionResult> ShowNews(CreateModel model)
         {
-            Edit = true;
-            return RedirectToAction("LecturerRoleController", "Admin");
+
+            return RedirectToAction("NewsWall", "NewsWall",new { id=Convert.ToInt32(model.Name)});
         }
         [Authorize(Roles = "Admin")]
         public IActionResult Create(CreateModel model)
         {
             NewsModel news = new NewsModel();
+            if (model.News.Title == null)
+            {
+                ModelState.AddModelError("", "Нет заголвка");
+            }
+            if (model.News.Content == null)
+            {
+                ModelState.AddModelError("", "Нет описания новости");
+            }
             news.Title = model.News.Title;
             news.Content = model.News.Content;
 
@@ -102,10 +112,10 @@ namespace OnlineChat.Controllers.NewsPanel
             
             if (model.File1 != null)
             {
-                news.PictureName = model.File1.ContentType;
+                news.DocName = model.File1.FileName;
                 using (var binaryReader = new BinaryReader(model.File1.OpenReadStream()))
                 {
-                    news.PictureBytes = binaryReader.ReadBytes((int)model.File1.Length);
+                    news.DocBytes = binaryReader.ReadBytes((int)model.File1.Length);
                 }
                 
             }

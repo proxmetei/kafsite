@@ -36,5 +36,7 @@
     <Folder Include="Views\ChatPanel\" />
     <Folder Include="Controllers\NewsPanel\" />
     <Folder Include="Views\NewsPanel\" />
+    <Folder Include="Controllers\NewsWall\" />
+    <Folder Include="Views\NewsWall\" />
   </ItemGroup>
 </Project>
